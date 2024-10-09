@@ -1,0 +1,45 @@
+version: '3.7'
+
+services:
+  master:
+    image: apache/spark-py:latest
+    container_name: 'master'
+    user: '0'   # rootユーザーでないとクラスタを起動できない
+    tty: true   # コンテナを起動しっぱなしにする
+    ports:
+      - '8080:8080' # spark UIのデフォルトポート
+      - '4040:4040' # spark UIの詳細ページのデフォルトポート
+    command: 'bash -c "/opt/spark/sbin/start-master.sh && /bin/bash"'
+  
+  worker1:
+    image: apache/spark-py:latest
+    container_name: 'worker1'
+    user: '0'
+    tty: true
+    ports:
+      - '8081:8081' # workerのuiのデフォルトは8081
+    depends_on:
+      - 'master'
+    command: 'bash -c "/opt/spark/sbin/start-worker.sh spark://master:7077 -c 1 -m 1g && /bin/bash"'
+  
+  worker2:
+    image: apache/spark-py:latest
+    container_name: 'worker2'
+    user: '0'
+    tty: true
+    ports:
+      - '8082:8081' # 8081はworker1が使ってるので、ここでは8082
+    depends_on:
+      - 'master'
+    command: 'bash -c "/opt/spark/sbin/start-worker.sh spark://master:7077 -c 1 -m 1g && /bin/bash"'
+
+  worker3:
+    image: apache/spark-py:latest
+    container_name: 'worker3'
+    user: '0'
+    tty: true
+    ports:
+      - '8083:8081' # 8081, 8082はworker1,2が使ってるので、ここでは8083
+    depends_on:
+      - 'master'
+    command: 'bash -c "/opt/spark/sbin/start-worker.sh spark://master:7077 -c 1 -m 1g && /bin/bash"'
