@@ -2,7 +2,12 @@ version: '3'
 
 services:
   master:
-    image: apache/spark-py:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: 'master'
     user: '0'   # rootユーザーでないとクラスタを起動できない
     tty: true   # コンテナを起動しっぱなしにする
@@ -12,7 +17,9 @@ services:
     command: 'bash -c "/opt/spark/sbin/start-master.sh && /bin/bash"'
   
   worker1:
-    image: apache/spark-py:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: 'worker1'
     user: '0'
     tty: true
@@ -23,7 +30,9 @@ services:
     command: 'bash -c "/opt/spark/sbin/start-worker.sh spark://master:7077 -c 1 -m 1g && /bin/bash"'
   
   worker2:
-    image: apache/spark-py:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: 'worker2'
     user: '0'
     tty: true
@@ -34,7 +43,9 @@ services:
     command: 'bash -c "/opt/spark/sbin/start-worker.sh spark://master:7077 -c 1 -m 1g && /bin/bash"'
 
   worker3:
-    image: apache/spark-py:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: 'worker3'
     user: '0'
     tty: true
