@@ -1,5 +1,10 @@
 from pyspark.ml.clustering import KMeans
 from pyspark.ml.evaluation import ClusteringEvaluator
+from pyspark.conf import SparkConf
+from pyspark.sql import SparkSession
+
+conf = SparkConf().setAppName("Spark Test").setMaster("spark://127.0.0.1:7077")
+spark = SparkSession.builder.config(conf=conf).getOrCreate()
 
 # Loads data.
 dataset = spark.read.format("libsvm").load("/opt/spark/data/mllib/sample_kmeans_data.txt")
