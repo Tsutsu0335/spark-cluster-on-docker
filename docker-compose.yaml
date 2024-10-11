@@ -5,9 +5,6 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     container_name: 'master'
     user: '0'   # rootユーザーでないとクラスタを起動できない
     tty: true   # コンテナを起動しっぱなしにする

@@ -3,27 +3,23 @@ from pyspark.ml.evaluation import ClusteringEvaluator
 from pyspark.conf import SparkConf
 from pyspark.sql import SparkSession
 
+
+print("heeeeeeeeeeeeeeeeeeeeeeeeloooooooooooooooooooooooo1")
+
+
 conf = SparkConf().setAppName("Spark Test").setMaster("spark://127.0.0.1:7077")
 spark = SparkSession.builder.config(conf=conf).getOrCreate()
 
+print("heeeeeeeeeeeeeeeeeeeeeeeeloooooooooooooooooooooooo2")
+
 # Loads data.
-dataset = spark.read.format("libsvm").load("/opt/spark/data/mllib/sample_kmeans_data.txt")
+dataset = spark.createDataFrame([
+(0.0, 0.0, 0.0),
+(0.1, 0.1, 0.1),
+(0.2, 0.2, 0.2),
+(9.0, 9.0, 9.0),
+(9.1, 9.1, 9.1),
+(9.2, 9.2, 9.2),
+], ["label1", "label2", "label3"])
 
-# Trains a k-means model.
-kmeans = KMeans().setK(2).setSeed(1)
-model = kmeans.fit(dataset)
-
-# Make predictions
-predictions = model.transform(dataset)
-
-# Evaluate clustering by computing Silhouette score
-evaluator = ClusteringEvaluator()
-
-silhouette = evaluator.evaluate(predictions)
-print("Silhouette with squared euclidean distance = " + str(silhouette))
-
-# Shows the result.
-centers = model.clusterCenters()
-print("Cluster Centers: ")
-for center in centers:
-    print(center)
+dataset.show()
